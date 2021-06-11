@@ -36,13 +36,34 @@ class UserController extends Controller
 
     public function edit($id){
         //find user by id from user list $user
+        $users = $this->getUserList();
 
-        return view('user.edit')->with('user', $user);
+        foreach ($users as $key => $value){
+            if ($value['id'] == $id) {
+                
+                $user = ['id'=>$id, 'name'=>$value['name'], 'email'=>$value['email']];
+                // $userName = $value['name'];
+                // $userEmail= $value['email'];
+            }
+        }
+
+        // return view('user.update')->with('userId', $id)->with('userName', $userName)->with('userEmail', $userEmail);
+        return view('user.update')->with('user', $user);
+
     }
 
     public function update(Request $req, $id){
         //craete new user array & add to list
         //new userList
+
+        $users = $this->getUserList();
+
+        foreach ($users as $key => $value){
+            if ($value['id'] == $req->id) {
+                $users[$key]['name']= $req->name;
+                $users[$key]['email'] = $req->email;
+            }
+        }
 
         return view('user.list')->with('userList', $users);
     }
@@ -50,13 +71,31 @@ class UserController extends Controller
     public function delete( $id){
         //confirm window
         //find user by id $user
+        
+        $users = $this->getUserList();
 
+        foreach ($users as $key => $value){
+            if ($value['id'] == $id) {
+                
+                $user = ['id'=>$id, 'name'=>$value['name'], 'email'=>$value['email']];
+
+            }
+        }
         return view('user.delete')->with('user', $user);
+
     }
 
     public function destroy($id){
         //remove user form list
         //create new list & display
+
+        $users = $this->getUserList();
+
+        foreach ($users as $key => $value){
+            if ($value['id'] == $id) {
+                unset($users[$key]);
+            }
+        }
 
         return view('user.list')->with('userList', $users);
     }
