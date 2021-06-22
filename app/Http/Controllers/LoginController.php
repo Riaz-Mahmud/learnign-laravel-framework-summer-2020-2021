@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Validator;
+use App\Http\Requests\UserRequest;
+use App\User;
 
 class LoginController extends Controller
 {
@@ -29,7 +32,10 @@ class LoginController extends Controller
         // $req->session()->keep('cgpa');
         // $req->session()->reflash();
 
-        if($req->uname == $req->password){
+        $user = User::where('username', $req->uname)
+            ->where('password', $req->password)
+            ->first();
+        if($user){
             $req->session()->put('uname', $req->uname);
             return redirect('/home');
         }else{
